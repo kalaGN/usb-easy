@@ -66,10 +66,8 @@
     <div class="content-area">
         <div class="sidebar" id="sidebar">
             <!-- 列表1的内容 -->
-            <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
+            <ul id="table-list">
+                <!-- 表名将动态插入到这里 -->
             </ul>
         </div>
         <div class="resizer" id="resizer"></div>
@@ -83,6 +81,60 @@
             const sidebar = document.getElementById('sidebar');
             const resizer = document.getElementById('resizer');
             const mainContent = document.getElementById('main-content');
+            const tableList = document.getElementById('table-list');
+
+            // 监听主进程发送的表名
+            require('electron').ipcRenderer.on('table-names', (event, tableNames) => {
+                tableList.innerHTML = ''; // 清空现有内容
+                tableNames.forEach(tableName => {
+                    const li = document.createElement('li');
+                    li.textContent = tableName;
+                    li.addEventListener('click', () => {
+                        require('electron').ipcRenderer.send('get-table-contents', tableName);
+                    });
+                    tableList.appendChild(li);
+                });
+            });
+
+            // 监听主进程发送的表内容
+            require('electron').ipcRenderer.on('table-contents', (event, tableContents) => {
+                mainContent.innerHTML = ''; // 清空现有内容
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
+
+                // 创建表头
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                if (tableContents.length > 0) {
+                    Object.keys(tableContents[0]).forEach(key => {
+                        const th = document.createElement('th');
+                        th.textContent = key;
+                        th.style.border = '1px solid #ddd';
+                        th.style.padding = '8px';
+                        headerRow.appendChild(th);
+                    });
+                }
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // 创建表体
+                const tbody = document.createElement('tbody');
+                tableContents.forEach(row => {
+                    const tr = document.createElement('tr');
+                    Object.values(row).forEach(value => {
+                        const td = document.createElement('td');
+                        td.textContent = value;
+                        td.style.border = '1px solid #ddd';
+                        td.style.padding = '8px';
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+                table.appendChild(tbody);
+
+                mainContent.appendChild(table);
+            });
 
             let startX, startWidth;
 
