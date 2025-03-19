@@ -25,6 +25,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "electron-squirrel-startup": "^1.0.1",
+    "element-ui": "^2.15.14",
     "mysql": "^2.18.1",
     "mysql2": "^3.13.0",
     "ssh2": "^1.16.0",

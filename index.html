@@ -1,79 +1,150 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Electron App</title>
-    <style>
-        /* 添加一些基本样式 */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-right: 10px; // 添加间距以便按钮不重叠
-        }
-      
-        .menu-bar {
-            width: 100%;
-            background-color: #ccc;
-            height: 50px; // 调整高度以适应顶部菜单栏
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; // 修改为 flex-start 以便按钮靠左排列
-            padding: 0 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .content-area {
-            display: flex;
-            height: 100vh; // 修改为 100vh 以占据整个视口高度
-        }
-
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #fff;
-            overflow-y: auto; // 添加滚动条以便内容过多时可以滚动
-        }
-
-        .resizer {
-            width: 5px;
-            background: #ccc;
-            cursor: ew-resize;
-            user-select: none;
-        }
-
-        .resizer:hover {
-            background: #aaa;
-        }
-    </style>
-</head>
+<!-- Delete: <link rel="stylesheet" href="./node_modules/element-ui/lib/theme-chalk/index.css"> -->
+<style>
+    /* 添加一些基本样式 */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    .menu-bar {
+        background-color: #ccc;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .content-area {
+        display: flex;
+        height: calc(100vh - 50px);
+    }
+    .resizer {
+        width: 5px;
+        background: #ccc;
+        cursor: ew-resize;
+        user-select: none;
+    }
+    .resizer:hover {
+        background: #aaa;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f4f4f4;
+    }
+</style>
 <body>
-    <h1>Welcome to My Electron App</h1>
     <div class="menu-bar">
-        <button>按钮1</button>
-        <button>按钮2</button>
-        <button>按钮3</button>
-        <button>按钮4</button>
-        <button>按钮5</button>
-        <button>按钮6</button>
+        <!-- 使用原生按钮组件 -->
+        <select id="port-select" placeholder="请选择端口">
+            <option label="80" value="80"></option>
+            <option label="443" value="443"></option>
+        </select>
+        <button id="connect-button">关闭端口</button>
+        <span>连接成功</span>
     </div>
     <div class="content-area">
         <div class="sidebar" id="sidebar">
-            <!-- 列表1的内容 -->
-            <ul id="table-list">
-                <!-- 表名将动态插入到这里 -->
-            </ul>
+            <!-- 使用原生表格组件 -->
+            <table id="status-table">
+                <thead>
+                    <tr>
+                        <th>路</th>
+                        <th>礼物品类</th>
+                        <th>待执行</th>
+                        <th>总计数</th>
+                        <th>执行方式</th>
+                        <th>执行频率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>第一路</td>
+                        <td>
+                            <select>
+                                <option value="小心心">小心心</option>
+                                <option value="跑车">跑车</option>
+                            </select>
+                        </td>
+                        <td>111</td>
+                        <td>604</td>
+                        <td>
+                            <select>
+                                <option value="手动">手动</option>
+                                <option value="连动">连动</option>
+                            </select>
+                        </td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>第二路</td>
+                        <td>
+                            <select>
+                                <option value="小心心">小心心</option>
+                                <option value="跑车">跑车</option>
+                            </select>
+                        </td>
+                        <td>0</td>
+                        <td>326</td>
+                        <td>
+                            <select>
+                                <option value="手动">手动</option>
+                                <option value="连动">连动</option>
+                            </select>
+                        </td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>第三路</td>
+                        <td>
+                            <select>
+                                <option value="小心心">小心心</option>
+                                <option value="跑车">跑车</option>
+                            </select>
+                        </td>
+                        <td>0</td>
+                        <td>64</td>
+                        <td>
+                            <select>
+                                <option value="手动">手动</option>
+                                <option value="连动">连动</option>
+                            </select>
+                        </td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>第四路</td>
+                        <td>
+                            <select>
+                                <option value="小心心">小心心</option>
+                                <option value="跑车">跑车</option>
+                            </select>
+                        </td>
+                        <td>0</td>
+                        <td>51</td>
+                        <td>
+                            <select>
+                                <option value="手动">手动</option>
+                                <option value="连动">连动</option>
+                            </select>
+                        </td>
+                        <td>0.5</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="resizer" id="resizer"></div>
         <div class="main-content" id="main-content">
-            <!-- 内容区1的内容 -->
-            <p>这里是主要内容区域。</p>
+            <!-- 主内容区域 -->
         </div>
     </div>
     <script>
@@ -81,60 +152,6 @@
             const sidebar = document.getElementById('sidebar');
             const resizer = document.getElementById('resizer');
             const mainContent = document.getElementById('main-content');
-            const tableList = document.getElementById('table-list');
-
-            // 监听主进程发送的表名
-            require('electron').ipcRenderer.on('table-names', (event, tableNames) => {
-                tableList.innerHTML = ''; // 清空现有内容
-                tableNames.forEach(tableName => {
-                    const li = document.createElement('li');
-                    li.textContent = tableName;
-                    li.addEventListener('click', () => {
-                        require('electron').ipcRenderer.send('get-table-contents', tableName);
-                    });
-                    tableList.appendChild(li);
-                });
-            });
-
-            // 监听主进程发送的表内容
-            require('electron').ipcRenderer.on('table-contents', (event, tableContents) => {
-                mainContent.innerHTML = ''; // 清空现有内容
-                const table = document.createElement('table');
-                table.style.width = '100%';
-                table.style.borderCollapse = 'collapse';
-
-                // 创建表头
-                const thead = document.createElement('thead');
-                const headerRow = document.createElement('tr');
-                if (tableContents.length > 0) {
-                    Object.keys(tableContents[0]).forEach(key => {
-                        const th = document.createElement('th');
-                        th.textContent = key;
-                        th.style.border = '1px solid #ddd';
-                        th.style.padding = '8px';
-                        headerRow.appendChild(th);
-                    });
-                }
-                thead.appendChild(headerRow);
-                table.appendChild(thead);
-
-                // 创建表体
-                const tbody = document.createElement('tbody');
-                tableContents.forEach(row => {
-                    const tr = document.createElement('tr');
-                    Object.values(row).forEach(value => {
-                        const td = document.createElement('td');
-                        td.textContent = value;
-                        td.style.border = '1px solid #ddd';
-                        td.style.padding = '8px';
-                        tr.appendChild(td);
-                    });
-                    tbody.appendChild(tr);
-                });
-                table.appendChild(tbody);
-
-                mainContent.appendChild(table);
-            });
 
             let startX, startWidth;
 
@@ -158,3 +175,5 @@
     </script>
 </body>
 </html>
+
+
