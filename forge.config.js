@@ -4,6 +4,10 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
+    appVersion:"1.0.1",
+    name: "调试助手",
+    appCopyright:"Afei(github.com/kalaGN)",
+    icon:"./assets/img/appIcon/favicon.ico",
   },
   rebuildConfig: {},
   makers: [

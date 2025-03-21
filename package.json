@@ -1,15 +1,16 @@
 {
-  "name": "elec-test",
-  "version": "1.0.0",
+  "name": "UsbEasy",
+  "version": "1.0.1",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "build:win": "electron-builder --win"
+    "build:win": "electron-builder --win",
+    "publish": "electron-forge publish"
   },
-  "author": "",
+  "author": "kalaGN",
   "license": "ISC",
   "description": "",
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@electron-forge/maker-zip": "^7.7.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.7.0",
     "@electron-forge/plugin-fuses": "^7.7.0",
+    "@electron-forge/publisher-github": "^7.7.0",
     "@electron/fuses": "^1.8.0",
     "@types/serialport": "^8.0.5",
     "electron": "^35.0.1",
@@ -32,8 +34,8 @@
     "update-electron-app": "^3.1.1"
   },
   "build": {
-    "appId": "com.example.myapp",
-    "productName": "MyApp",
+    "appId": "com.KalaGN.UsbEasy",
+    "productName": "UsbEasy",
     "directories": {
       "output": "dist"
     },
@@ -41,7 +43,7 @@
       "target": [
         "nsis"
       ],
-      "icon": "build/icon.ico"
+      "icon": "./assets/img/appIcon/favicon.ico"
     },
     "extraResources": [
       ""
