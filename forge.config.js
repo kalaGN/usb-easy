@@ -8,6 +8,13 @@ module.exports = {
     name: "调试助手",
     appCopyright:"Afei(github.com/kalaGN)",
     icon:"./assets/img/appIcon/favicon.ico",
+    win32metadata: {
+      CompanyName: "Afei",
+      FileDescription: "调试助手",
+      OriginalFilename: "调试助手.exe",
+      ProductName: "调试助手",
+      InternalName: "调试助手.exe"
+    }
   },
   rebuildConfig: {},
   makers: [
