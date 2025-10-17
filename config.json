@@ -1,0 +1,48 @@
+{
+  "channels": [
+    {
+      "id": "first",
+      "name": "第一路",
+      "giftType": "小心心",
+      "giftOptions": ["小心心", "跑车"],
+      "pendingExecution": 111,
+      "totalCount": 604,
+      "executionMode": "手动",
+      "modeOptions": ["手动", "连动"],
+      "executionFrequency": 0.5
+    },
+    {
+      "id": "second",
+      "name": "第二路",
+      "giftType": "小心心",
+      "giftOptions": ["小心心", "跑车"],
+      "pendingExecution": 0,
+      "totalCount": 326,
+      "executionMode": "手动",
+      "modeOptions": ["手动", "连动"],
+      "executionFrequency": 0.5
+    },
+    {
+      "id": "third",
+      "name": "第三路",
+      "giftType": "小心心",
+      "giftOptions": ["小心心", "跑车"],
+      "pendingExecution": 0,
+      "totalCount": 64,
+      "executionMode": "手动",
+      "modeOptions": ["手动", "连动"],
+      "executionFrequency": 0.5
+    },
+    {
+      "id": "fourth",
+      "name": "第四路",
+      "giftType": "小心心",
+      "giftOptions": ["小心心", "跑车"],
+      "pendingExecution": 0,
+      "totalCount": 51,
+      "executionMode": "手动",
+      "modeOptions": ["手动", "连动"],
+      "executionFrequency": 0.5
+    }
+  ]
+}

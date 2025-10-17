@@ -1,180 +1,377 @@
-<!-- Delete: <link rel="stylesheet" href="./node_modules/element-ui/lib/theme-chalk/index.css"> -->
-<style>
-    /* 添加一些基本样式 */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }
-    .menu-bar {
-        background-color: #ccc;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .content-area {
-        display: flex;
-        height: calc(100vh - 50px);
-    }
-    .resizer {
-        width: 5px;
-        background: #ccc;
-        cursor: ew-resize;
-        user-select: none;
-    }
-    .resizer:hover {
-        background: #aaa;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f4f4f4;
-    }
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>USB Easy</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .control-panel {
+            margin-bottom: 20px;
+        }
+        .data-panel {
+            display: flex;
+            gap: 20px;
+        }
+        .data-card {
+            flex: 1;
+        }
+        .data-display {
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .data-input {
+            width: 100%;
+        }
+    </style>
+</head>
 <body>
-    <div class="menu-bar">
-        <!-- 使用原生按钮组件 -->
-        <select id="port-select" placeholder="请选择端口">
-            <option label="80" value="80"></option>
-            <option label="443" value="443"></option>
-            <option label="USB" value="443"></option>
-        </select>
-        <button id="connect-button">打开端口</button>
-        <span>连接成功</span>
-    </div>
-    <div class="content-area">
-        <div class="sidebar" id="sidebar">
-            <!-- 使用原生表格组件 -->
-            <table id="status-table">
-                <thead>
-                    <tr>
-                        <th>路</th>
-                        <th>礼物品类</th>
-                        <th>待执行</th>
-                        <th>总计数</th>
-                        <th>执行方式</th>
-                        <th>执行频率</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>第一路</td>
-                        <td>
-                            <select>
-                                <option value="小心心">小心心</option>
-                                <option value="跑车">跑车</option>
-                            </select>
-                        </td>
-                        <td>111</td>
-                        <td>604</td>
-                        <td>
-                            <select>
-                                <option value="手动">手动</option>
-                                <option value="连动">连动</option>
-                            </select>
-                        </td>
-                        <td>0.5</td>
-                    </tr>
-                    <tr>
-                        <td>第二路</td>
-                        <td>
-                            <select>
-                                <option value="小心心">小心心</option>
-                                <option value="跑车">跑车</option>
-                            </select>
-                        </td>
-                        <td>0</td>
-                        <td>326</td>
-                        <td>
-                            <select>
-                                <option value="手动">手动</option>
-                                <option value="连动">连动</option>
-                            </select>
-                        </td>
-                        <td>0.5</td>
-                    </tr>
-                    <tr>
-                        <td>第三路</td>
-                        <td>
-                            <select>
-                                <option value="小心心">小心心</option>
-                                <option value="跑车">跑车</option>
-                            </select>
-                        </td>
-                        <td>0</td>
-                        <td>64</td>
-                        <td>
-                            <select>
-                                <option value="手动">手动</option>
-                                <option value="连动">连动</option>
-                            </select>
-                        </td>
-                        <td>0.5</td>
-                    </tr>
-                    <tr>
-                        <td>第四路</td>
-                        <td>
-                            <select>
-                                <option value="小心心">小心心</option>
-                                <option value="跑车">跑车</option>
-                            </select>
-                        </td>
-                        <td>0</td>
-                        <td>51</td>
-                        <td>
-                            <select>
-                                <option value="手动">手动</option>
-                                <option value="连动">连动</option>
-                            </select>
-                        </td>
-                        <td>0.5</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div id="app">
+        <div class="header">
+            <h1>USB Easy</h1>
         </div>
-        <div class="resizer" id="resizer"></div>
-        <div class="main-content" id="main-content">
-            <!-- 主内容区域 -->
-        </div>
+        
+        <el-tabs v-model="activeTab">
+            <el-tab-pane label="连接设置" name="connection">
+                <el-card class="control-panel">
+                    <div slot="header">
+                        <span>串口连接</span>
+                    </div>
+                    <el-form label-width="100px">
+                        <el-form-item label="选择端口">
+                            <el-select v-model="selectedPort" placeholder="请选择端口" :disabled="isConnected">
+                                <el-option
+                                    v-for="port in portList"
+                                    :key="port.value"
+                                    :label="port.label"
+                                    :value="port.value">
+                                </el-option>
+                            </el-select>
+                            <el-button @click="loadPortList" icon="el-icon-refresh" circle style="margin-left: 10px;"></el-button>
+                        </el-form-item>
+                        
+                        <el-form-item label="波特率">
+                            <el-select v-model="baudRate" placeholder="请选择波特率" :disabled="isConnected">
+                                <el-option
+                                    v-for="rate in baudRates"
+                                    :key="rate"
+                                    :label="rate"
+                                    :value="rate">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        
+                        <el-form-item>
+                            <el-button 
+                                type="primary" 
+                                @click="toggleConnection" 
+                                :loading="connecting">
+                                {{ isConnected ? '断开连接' : '连接' }}
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-card>
+            </el-tab-pane>
+            
+            <el-tab-pane label="数据通信" name="data">
+                <div class="data-panel">
+                    <el-col :span="12">
+                        <el-card class="data-card">
+                            <div slot="header">
+                                <span>发送数据</span>
+                            </div>
+                            <el-input
+                                type="textarea"
+                                :rows="6"
+                                placeholder="请输入要发送的内容"
+                                v-model="sendData">
+                            </el-input>
+                            <div style="margin-top: 15px;">
+                                <el-checkbox v-model="hexSend">HEX发送</el-checkbox>
+                                <el-button type="primary" @click="sendDataToPort" :disabled="!isConnected" style="margin-left: 10px;">发送</el-button>
+                                <el-button @click="clearSendData">清空</el-button>
+                                <div style="margin-top: 10px; font-size: 12px; color: #999;">
+                                    <div v-if="hexSend">HEX模式: 输入十六进制字符(0-9, A-F)，如: 48 65 6C 6C 6F</div>
+                                    <div v-else>文本模式: 输入普通文本，如: Hello World</div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    
+                    <el-col :span="12">
+                        <el-card class="data-card">
+                            <div slot="header">
+                                <span>接收数据</span>
+                                <el-checkbox v-model="hexReceive" style="margin-left: 20px;">HEX显示</el-checkbox>
+                                <el-checkbox v-model="autoScroll" style="margin-left: 20px;">自动滚动</el-checkbox>
+                                <el-button style="float: right; padding: 3px 0" type="text" @click="clearReceivedData">清空</el-button>
+                            </div>
+                            <div class="data-display">{{ receivedData }}</div>
+                            <div>
+                                <el-button @click="clearAllData">清空所有</el-button>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
     </div>
+
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const resizer = document.getElementById('resizer');
-            const mainContent = document.getElementById('main-content');
-
-            let startX, startWidth;
-
-            resizer.addEventListener('mousedown', (e) => {
-                startX = e.pageX;
-                startWidth = sidebar.offsetWidth;
-                document.addEventListener('mousemove', resize);
-                document.addEventListener('mouseup', stopResize);
-            });
-
-            function resize(e) {
-                sidebar.style.width = `${startWidth + e.pageX - startX}px`;
-                mainContent.style.width = `calc(100% - ${startWidth + e.pageX - startX}px)`;
-            }
-
-            function stopResize() {
-                document.removeEventListener('mousemove', resize);
-                document.removeEventListener('mouseup', stopResize);
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    selectedPort: '',
+                    baudRate: 9600,
+                    dataBits: 8,
+                    stopBits: 1,
+                    isConnected: false,
+                    connecting: false,
+                    activeTab: 'data',
+                    sendData: '',
+                    receivedData: '',
+                    hexSend: true,
+                    hexReceive: true,
+                    autoScroll: true,
+                    portList: [
+                        { label: 'COM1', value: 'COM1' },
+                        { label: 'COM2', value: 'COM2' },
+                        { label: 'COM3', value: 'COM3' },
+                        { label: 'COM4', value: 'COM4' },
+                        { label: '/dev/ttyUSB0', value: '/dev/ttyUSB0' },
+                        { label: '/dev/ttyUSB1', value: '/dev/ttyUSB1' }
+                    ],
+                    baudRates: [9600, 19200, 38400, 57600, 115200],
+                    dataBitsOptions: [5, 6, 7, 8],
+                    stopBitsOptions: [1, 1.5, 2]
+                }
+            },
+            methods: {
+                toggleConnection() {
+                    if (this.isConnected) {
+                        this.disconnectPort();
+                    } else {
+                        this.connectPort();
+                    }
+                },
+                connectPort() {
+                    if (!this.selectedPort) {
+                        this.$message.warning('请选择端口');
+                        return;
+                    }
+                    
+                    this.connecting = true;
+                    
+                    // 准备串口连接参数
+                    const portOptions = {
+                        baudRate: this.baudRate,
+                        dataBits: this.dataBits,
+                        stopBits: this.stopBits
+                    };
+                    
+                    // 调用主进程连接端口
+                    window.electronAPI.connectPort(this.selectedPort, portOptions)
+                        .then(result => {
+                            if (result.success) {
+                                this.isConnected = true;
+                                this.$message.success(result.message);
+                            } else {
+                                this.$message.error('连接失败: ' + result.message);
+                            }
+                        })
+                        .catch(error => {
+                            this.$message.error('连接异常: ' + error.message);
+                        })
+                        .finally(() => {
+                            this.connecting = false;
+                        });
+                },
+                disconnectPort() {
+                    this.connecting = true;
+                    window.electronAPI.disconnectPort()
+                        .then(result => {
+                            if (result.success) {
+                                this.isConnected = false;
+                                this.$message.info(result.message);
+                            } else {
+                                this.$message.error('断开连接失败: ' + result.message);
+                            }
+                        })
+                        .catch(error => {
+                            this.$message.error('断开连接异常: ' + error.message);
+                        })
+                        .finally(() => {
+                            this.connecting = false;
+                        });
+                },
+                sendDataToPort() {
+                    if (!this.sendData) {
+                        this.$message.warning('发送内容不能为空');
+                        return;
+                    }
+                    
+                    let dataToSend = this.sendData;
+                    
+                    // Add debug information
+                    console.log('Preparing to send data:', { 
+                        original: this.sendData,
+                        hexMode: this.hexSend,
+                        connectionStatus: this.isConnected
+                    });
+                    
+                    // If HEX send is checked, convert the data
+                    if (this.hexSend) {
+                        try {
+                            // Remove all spaces and convert to uppercase
+                            const hexString = this.sendData.replace(/\s/g, '').toUpperCase();
+                            
+                            // Validate if it's a valid hexadecimal string
+                            if (!/^[0-9A-F]+$/.test(hexString)) {
+                                this.$message.error('HEX数据格式不正确，请输入有效的十六进制字符(0-9, A-F)');
+                                return;
+                            }
+                            
+                            // Ensure even character count
+                            if (hexString.length % 2 !== 0) {
+                                this.$message.error('HEX数据长度必须为偶数，请检查输入');
+                                return;
+                            }
+                            
+                            // Convert hexadecimal string to byte array
+                            const bytes = [];
+                            for (let i = 0; i < hexString.length; i += 2) {
+                                bytes.push(parseInt(hexString.substr(i, 2), 16));
+                            }
+                            
+                            // For proper handling of binary data, send as array instead of string
+                            // This prevents encoding issues when converting bytes to strings
+                            dataToSend = bytes;
+                            
+                            // Display HEX format in send data display
+                            const displayData = `HEX Send: ${hexString}\n`;
+                            this.receivedData += displayData;
+                            
+                            // Add debug information
+                            console.log('HEX send data:', { original: hexString, bytes: bytes, sendingAsArray: true });
+                        } catch (error) {
+                            this.$message.error('HEX数据转换错误: ' + error.message);
+                            console.error('HEX conversion error:', error);
+                            return;
+                        }
+                    } else {
+                        // Normal text send
+                        this.receivedData += `Send: ${this.sendData}\n`;
+                        
+                        // Add debug information
+                        console.log('Text send data:', { original: this.sendData, sending: dataToSend });
+                    }
+                    
+                    // Send data to serial port
+                    window.electronAPI.sendData(dataToSend)
+                        .then(result => {
+                            if (result.success) {
+                                this.$message.success(result.message);
+                            } else {
+                                this.$message.error('发送失败: ' + result.message);
+                            }
+                            // Add debug information
+                            console.log('Send result:', result);
+                        })
+                        .catch(error => {
+                            this.$message.error('发送异常: ' + error.message);
+                            console.error('Send exception:', error);
+                        });
+                    
+                    // Scroll to bottom if auto-scroll is enabled
+                    if (this.autoScroll) {
+                        this.$nextTick(() => {
+                            const dataDisplay = document.querySelector('.data-display');
+                            if (dataDisplay) {
+                                dataDisplay.scrollTop = dataDisplay.scrollHeight;
+                            }
+                        });
+                    }
+                },
+                clearSendData() {
+                    this.sendData = '';
+                },
+                clearReceivedData() {
+                    this.receivedData = '';
+                },
+                clearAllData() {
+                    this.sendData = '';
+                    this.receivedData = '';
+                    this.$message.success('已清空所有数据');
+                },
+                selectPort(port) {
+                    this.selectedPort = port.value;
+                },
+                async loadPortList() {
+                    try {
+                        const result = await window.electronAPI.listPorts();
+                        if (result.success) {
+                            this.portList = result.ports;
+                            if (this.portList.length > 0 && !this.selectedPort) {
+                                this.selectedPort = this.portList[0].value;
+                            }
+                        } else {
+                            console.error('获取串口列表失败:', result.error);
+                            this.$message.error('获取串口列表失败: ' + result.error);
+                        }
+                    } catch (error) {
+                        console.error('获取串口列表异常:', error);
+                        this.$message.error('获取串口列表异常: ' + error.message);
+                    }
+                }
+            },
+            mounted() {
+                // 页面加载完成后自动检测端口号
+                this.loadPortList();
+                
+                // 监听串口数据
+                window.electronAPI.onSerialData((data) => {
+                    // 如果勾选了HEX接收，则以HEX格式显示
+                    if (this.hexReceive) {
+                        const hexData = Buffer.from(data).toString('hex').toUpperCase();
+                        this.receivedData += `HEX接收: ${hexData}\n`;
+                    } else {
+                        this.receivedData += `接收: ${data}\n`;
+                    }
+                    
+                    // 如果启用自动滚动，则滚动到底部
+                    if (this.autoScroll) {
+                        this.$nextTick(() => {
+                            const dataDisplay = document.querySelector('.data-display');
+                            if (dataDisplay) {
+                                dataDisplay.scrollTop = dataDisplay.scrollHeight;
+                            }
+                        });
+                    }
+                });
+                
+                // 监听串口错误
+                window.electronAPI.onSerialError((error) => {
+                    this.$message.error('串口错误: ' + error);
+                    this.isConnected = false;
+                });
             }
         });
     </script>
 </body>
 </html>
-
-
