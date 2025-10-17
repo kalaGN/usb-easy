@@ -4,39 +4,7 @@
     <meta charset="UTF-8">
     <title>USB Easy</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .control-panel {
-            margin-bottom: 20px;
-        }
-        .data-panel {
-            display: flex;
-            gap: 20px;
-        }
-        .data-card {
-            flex: 1;
-        }
-        .data-display {
-            height: 300px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            font-family: monospace;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .data-input {
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
     <div id="app">
@@ -99,11 +67,11 @@
                                 placeholder="请输入要发送的内容"
                                 v-model="sendData">
                             </el-input>
-                            <div style="margin-top: 15px;">
+                            <div class="margin-top-15">
                                 <el-checkbox v-model="hexSend">HEX发送</el-checkbox>
-                                <el-button type="primary" @click="sendDataToPort" :disabled="!isConnected" style="margin-left: 10px;">发送</el-button>
+                                <el-button type="primary" @click="sendDataToPort" :disabled="!isConnected" class="button-spacing">发送</el-button>
                                 <el-button @click="clearSendData">清空</el-button>
-                                <div style="margin-top: 10px; font-size: 12px; color: #999;">
+                                <div class="small-gray-text">
                                     <div v-if="hexSend">HEX模式: 输入十六进制字符(0-9, A-F)，如: 48 65 6C 6C 6F</div>
                                     <div v-else>文本模式: 输入普通文本，如: Hello World</div>
                                 </div>
@@ -115,9 +83,9 @@
                         <el-card class="data-card">
                             <div slot="header">
                                 <span>接收数据</span>
-                                <el-checkbox v-model="hexReceive" style="margin-left: 20px;">HEX显示</el-checkbox>
-                                <el-checkbox v-model="autoScroll" style="margin-left: 20px;">自动滚动</el-checkbox>
-                                <el-button style="float: right; padding: 3px 0" type="text" @click="clearReceivedData">清空</el-button>
+                                <el-checkbox v-model="hexReceive" class="margin-left-20">HEX显示</el-checkbox>
+                                <el-checkbox v-model="autoScroll" class="margin-left-20">自动滚动</el-checkbox>
+                                <el-button class="float-right" type="text" @click="clearReceivedData">清空</el-button>
                             </div>
                             <div class="data-display">{{ receivedData }}</div>
                             <div>
