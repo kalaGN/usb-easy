@@ -81,3 +81,12 @@ body {
 .margin-left-20 {
     margin-left: 20px;
 }
+
+/* 版本号信息 */
+.version-info {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    font-size: 12px;
+    color: #999;
+}

@@ -96,6 +96,8 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
+        
+        <div class="version-info">版本号: {{ appVersion }}</div>
     </div>
 
     <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
@@ -117,6 +119,7 @@
                     hexSend: true,
                     hexReceive: true,
                     autoScroll: true,
+                    appVersion: '1.0.1',
                     portList: [
                         { label: 'COM1', value: 'COM1' },
                         { label: 'COM2', value: 'COM2' },
